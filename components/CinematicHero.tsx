@@ -14,24 +14,30 @@ interface CinematicHeroProps {
 export default function CinematicHero({
   onOpenReservation,
 }: CinematicHeroProps) {
-  const [isVideoLoaded, setIsVideoLoaded] = useState<boolean>(false);
+  const [isVideoPlaying, setIsVideoPlaying] = useState<boolean>(false);
+  const [videoSrc, setVideoSrc] = useState<string>("/video/hero-empire.mp4");
   const lenisRef = useRef<Lenis | null>(null);
   const videoRef = useRef<HTMLVideoElement | null>(null);
 
-  // Initialize Lenis for natural, fluid 120fps scrolling
+  // Initialize smooth scrolling: Native 120Hz GPU touch scrolling on mobile, Lenis on desktop
   useEffect(() => {
     const isTouch =
       typeof window !== "undefined" &&
-      ("ontouchstart" in window || navigator.maxTouchPoints > 0);
+      ("ontouchstart" in window || navigator.maxTouchPoints > 0 || window.innerWidth < 768);
+
+    // On mobile devices, allow native hardware compositor to scroll at silky 120fps with zero JS lag
+    if (isTouch) {
+      setVideoSrc("/video/hero-empire-m.mp4");
+      return;
+    }
 
     const lenis = new Lenis({
-      duration: isTouch ? 0.8 : 1.2,
+      duration: 1.2,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       orientation: "vertical",
       gestureOrientation: "vertical",
       smoothWheel: true,
       wheelMultiplier: 0.9,
-      touchMultiplier: 1.1,
       prevent: (node) =>
         !!node.closest?.("form, [role='dialog'], [aria-modal='true'], [data-lenis-prevent]"),
     });
@@ -65,7 +71,7 @@ export default function CinematicHero({
         // Autoplay prevented by browser power-saving mode, poster remains visible
       });
     }
-  }, []);
+  }, [videoSrc]);
 
   const handleScrollToRituals = () => {
     scrollToSection("rituals");
@@ -84,38 +90,33 @@ export default function CinematicHero({
         ========================================================================
       */}
       <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
-        {/* Instant Poster while video boots */}
-        <div
-          className={`absolute inset-0 transition-opacity duration-700 ${
-            isVideoLoaded ? "opacity-0" : "opacity-100"
-          }`}
-        >
+        {/* Permanent Instant Luxury Foundation: Always rendered, zero delay, never goes black */}
+        <div className="absolute inset-0">
           <Image
             src="/images/gallery/room-gold-marble.jpg"
             alt="The Empire Spa Shahupuri Kolhapur"
             fill
             priority
             sizes="100vw"
-            quality={90}
-            className="object-cover object-center filter brightness-[0.70] contrast-[1.08]"
+            quality={85}
+            className="object-cover object-center filter brightness-[0.72] contrast-[1.08]"
           />
         </div>
 
-        {/* Native Full Clarity HD Video */}
+        {/* Lightweight, Hardware-Accelerated Ambient Video Overlay (5.8MB mobile, 16MB desktop) */}
         <video
           ref={videoRef}
+          src={videoSrc}
           autoPlay
           loop
           muted
           playsInline
           preload="auto"
-          poster="/images/gallery/room-gold-marble.jpg"
-          onLoadedData={() => setIsVideoLoaded(true)}
-          className="absolute inset-0 w-full h-full object-cover object-center filter brightness-[0.80] contrast-[1.08]"
-        >
-          <source src="/video/empire-hd-mobile.mp4" media="(max-width: 768px)" type="video/mp4" />
-          <source src="/video/empire-hd.mp4" type="video/mp4" />
-        </video>
+          onPlaying={() => setIsVideoPlaying(true)}
+          className={`absolute inset-0 w-full h-full object-cover object-center filter brightness-[0.80] contrast-[1.08] transition-opacity duration-1000 ${
+            isVideoPlaying ? "opacity-100" : "opacity-0"
+          }`}
+        />
 
         {/* Minimal Subtle Cinematic Vignettes to preserve video clarity */}
         <div className="absolute inset-0 bg-gradient-to-t from-[#07090b] via-[#07090b]/30 to-[#07090b]/60" />
@@ -124,30 +125,30 @@ export default function CinematicHero({
       </div>
 
       {/* Top Spacer for floating navbar clearance */}
-      <div className="h-20 sm:h-28 w-full relative z-10 shrink-0" />
+      <div className="h-16 sm:h-28 w-full relative z-10 shrink-0" />
 
       {/* 
         ========================================================================
         MINIMALIST HAUTE-COUTURE CENTERPIECE (BREATHING SPACE & CLARITY)
         ========================================================================
       */}
-      <div className="relative z-10 w-full max-w-3xl mx-auto px-4 sm:px-8 py-3 sm:py-6 flex flex-col items-center text-center my-auto">
+      <div className="relative z-10 w-full max-w-3xl mx-auto px-4 sm:px-8 py-2 sm:py-6 flex flex-col items-center text-center my-auto">
         {/* Discreet Monogram Eyebrow */}
-        <div className="flex items-center gap-2.5 sm:gap-3 mb-3.5 sm:mb-5">
-          <span className="w-6 sm:w-12 h-px bg-[#c5a880]/60" />
-          <span className="text-[10px] sm:text-xs tracking-[0.35em] sm:tracking-[0.45em] uppercase text-[#d9bb8e] font-mono">
+        <div className="flex items-center gap-2 sm:gap-3 mb-2.5 sm:mb-5">
+          <span className="w-5 sm:w-12 h-px bg-[#c5a880]/60" />
+          <span className="text-[9px] sm:text-xs tracking-[0.28em] sm:tracking-[0.45em] uppercase text-[#d9bb8e] font-mono">
             Shahupuri · Kolhapur
           </span>
-          <span className="w-6 sm:w-12 h-px bg-[#c5a880]/60" />
+          <span className="w-5 sm:w-12 h-px bg-[#c5a880]/60" />
         </div>
 
         {/* Clean Grand Title */}
-        <h1 className="text-4xl sm:text-7xl md:text-8xl lg:text-9xl font-serif font-extralight tracking-[0.08em] sm:tracking-[0.14em] text-[#f7f4ee] uppercase leading-[1.04] sm:leading-[0.95] mb-2.5 sm:mb-4 text-shade-strong">
+        <h1 className="text-3xl sm:text-7xl md:text-8xl lg:text-9xl font-serif font-extralight tracking-[0.06em] sm:tracking-[0.14em] text-[#f7f4ee] uppercase leading-[1.08] sm:leading-[0.95] mb-2 sm:mb-4 text-shade-strong">
           The Empire <span className="font-light italic text-[#e4d3ba]">Spa</span>
         </h1>
 
         {/* Serene Italic Subtitle */}
-        <p className="text-lg sm:text-3xl md:text-4xl font-serif italic font-light text-[#f0dfc2] tracking-wide mb-5 sm:mb-8 text-shade-strong">
+        <p className="text-sm sm:text-3xl md:text-4xl font-serif italic font-light text-[#f0dfc2] tracking-wide mb-4 sm:mb-8 text-shade-strong max-w-xl mx-auto">
           Stillness, kept <span className="text-[#e4d3ba]">ready</span> for you.
         </p>
 
