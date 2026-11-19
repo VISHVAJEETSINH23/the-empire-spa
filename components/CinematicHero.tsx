@@ -15,7 +15,6 @@ export default function CinematicHero({
   onOpenReservation,
 }: CinematicHeroProps) {
   const [isVideoPlaying, setIsVideoPlaying] = useState<boolean>(false);
-  const [videoSrc, setVideoSrc] = useState<string>("/video/hero-empire.mp4");
   const lenisRef = useRef<Lenis | null>(null);
   const videoRef = useRef<HTMLVideoElement | null>(null);
 
@@ -27,7 +26,6 @@ export default function CinematicHero({
 
     // On mobile devices, allow native hardware compositor to scroll at silky 120fps with zero JS lag
     if (isTouch) {
-      setVideoSrc("/video/hero-empire-m.mp4");
       return;
     }
 
@@ -71,7 +69,7 @@ export default function CinematicHero({
         // Autoplay prevented by browser power-saving mode, poster remains visible
       });
     }
-  }, [videoSrc]);
+  }, []);
 
   const handleScrollToRituals = () => {
     scrollToSection("rituals");
@@ -90,7 +88,7 @@ export default function CinematicHero({
         ========================================================================
       */}
       <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
-        {/* Permanent Instant Luxury Foundation: Always rendered, zero delay, never goes black */}
+        {/* Permanent Instant Ultra-Luxury Room Visual: Always 100% visible, zero delay, never goes black */}
         <div className="absolute inset-0">
           <Image
             src="/images/gallery/room-gold-marble.jpg"
@@ -98,30 +96,30 @@ export default function CinematicHero({
             fill
             priority
             sizes="100vw"
-            quality={85}
-            className="object-cover object-center filter brightness-[0.72] contrast-[1.08]"
+            quality={92}
+            className="object-cover object-center filter brightness-[0.92] contrast-[1.08] saturate-[1.12]"
           />
         </div>
 
-        {/* Lightweight, Hardware-Accelerated Ambient Video Overlay (5.8MB mobile, 16MB desktop) */}
+        {/* Lightweight Hardware-Accelerated Ambient Video Overlay (5.8MB) */}
         <video
           ref={videoRef}
-          src={videoSrc}
           autoPlay
           loop
           muted
           playsInline
           preload="auto"
           onPlaying={() => setIsVideoPlaying(true)}
-          className={`absolute inset-0 w-full h-full object-cover object-center filter brightness-[0.80] contrast-[1.08] transition-opacity duration-1000 ${
+          className={`absolute inset-0 w-full h-full object-cover object-center filter brightness-[0.90] contrast-[1.08] transition-opacity duration-1000 ${
             isVideoPlaying ? "opacity-100" : "opacity-0"
           }`}
-        />
+        >
+          <source src="/video/hero-empire-m.mp4" type="video/mp4" />
+        </video>
 
-        {/* Minimal Subtle Cinematic Vignettes to preserve video clarity */}
-        <div className="absolute inset-0 bg-gradient-to-t from-[#07090b] via-[#07090b]/30 to-[#07090b]/60" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-transparent via-[#07090b]/20 to-[#07090b]/65" />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#07090b]/60 via-transparent to-[#07090b]" />
+        {/* Subtle, refined cinematic vignette: clean contrast for text, pristine room visibility */}
+        <div className="absolute inset-0 bg-gradient-to-b from-[#07090b]/70 via-black/15 to-[#07090b]/85 pointer-events-none" />
+        <div className="absolute inset-0 bg-black/20 pointer-events-none" />
       </div>
 
       {/* Top Spacer for floating navbar clearance */}
