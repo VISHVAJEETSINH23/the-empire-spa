@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import Image from "next/image";
 import Lenis from "lenis";
 import { scrollToSection } from "@/lib/scroll";
 
@@ -81,11 +82,24 @@ export default function CinematicHero({
       {/* 
         ========================================================================
         FULL CLARITY HD EMPIRE VIDEO (HARDWARE-ACCELERATED NATIVE PLAYBACK)
-        Mobile & Desktop: Starts immediately with exact first-frame poster (no image flash)
+        Mobile & Desktop: Guaranteed non-blank instant image foundation + seamless video
         ========================================================================
       */}
       <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none bg-[#07090b]">
-        {/* Hardware-Accelerated Ambient Video with exact first-frame poster */}
+        {/* Instant 0ms Visual Foundation: Matches the exact first frame of the video so screen is NEVER blank */}
+        <div className="absolute inset-0">
+          <Image
+            src="/video/hero-empire-poster.jpg"
+            alt="The Empire Spa Shahupuri Kolhapur"
+            fill
+            priority
+            sizes="100vw"
+            quality={90}
+            className="object-cover object-center filter brightness-[0.92] contrast-[1.08]"
+          />
+        </div>
+
+        {/* Hardware-Accelerated Ambient Video */}
         <video
           ref={videoRef}
           autoPlay
@@ -93,7 +107,7 @@ export default function CinematicHero({
           muted
           playsInline
           preload="auto"
-          poster="/video/hero-empire-poster.webp"
+          poster="/video/hero-empire-poster.jpg"
           className="absolute inset-0 w-full h-full object-cover object-center filter brightness-[0.92] contrast-[1.08]"
         >
           <source src="/video/hero-empire-m.mp4" type="video/mp4" />
