@@ -1,7 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import Image from "next/image";
+import { useEffect, useRef } from "react";
 import Lenis from "lenis";
 import { scrollToSection } from "@/lib/scroll";
 
@@ -14,7 +13,6 @@ interface CinematicHeroProps {
 export default function CinematicHero({
   onOpenReservation,
 }: CinematicHeroProps) {
-  const [isVideoPlaying, setIsVideoPlaying] = useState<boolean>(false);
   const lenisRef = useRef<Lenis | null>(null);
   const videoRef = useRef<HTMLVideoElement | null>(null);
 
@@ -83,25 +81,11 @@ export default function CinematicHero({
       {/* 
         ========================================================================
         FULL CLARITY HD EMPIRE VIDEO (HARDWARE-ACCELERATED NATIVE PLAYBACK)
-        Mobile: 1080x1920 Full HD Vertical Crop
-        Desktop: 1920x1080 Full HD Landscape
+        Mobile & Desktop: Starts immediately with exact first-frame poster (no image flash)
         ========================================================================
       */}
-      <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
-        {/* Permanent Instant Ultra-Luxury Room Visual: Always 100% visible, zero delay, never goes black */}
-        <div className="absolute inset-0">
-          <Image
-            src="/images/gallery/room-gold-marble.jpg"
-            alt="The Empire Spa Shahupuri Kolhapur"
-            fill
-            priority
-            sizes="100vw"
-            quality={92}
-            className="object-cover object-center filter brightness-[0.92] contrast-[1.08] saturate-[1.12]"
-          />
-        </div>
-
-        {/* Lightweight Hardware-Accelerated Ambient Video Overlay (5.8MB) */}
+      <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none bg-[#07090b]">
+        {/* Hardware-Accelerated Ambient Video with exact first-frame poster */}
         <video
           ref={videoRef}
           autoPlay
@@ -109,12 +93,11 @@ export default function CinematicHero({
           muted
           playsInline
           preload="auto"
-          onPlaying={() => setIsVideoPlaying(true)}
-          className={`absolute inset-0 w-full h-full object-cover object-center filter brightness-[0.90] contrast-[1.08] transition-opacity duration-1000 ${
-            isVideoPlaying ? "opacity-100" : "opacity-0"
-          }`}
+          poster="/video/hero-empire-poster.webp"
+          className="absolute inset-0 w-full h-full object-cover object-center filter brightness-[0.92] contrast-[1.08]"
         >
           <source src="/video/hero-empire-m.mp4" type="video/mp4" />
+          <source src="/video/hero-empire.mp4" type="video/mp4" />
         </video>
 
         {/* Subtle, refined cinematic vignette: clean contrast for text, pristine room visibility */}
